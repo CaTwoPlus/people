@@ -1,57 +1,55 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
-
-#define MAX_PATIENTS 100
-
-struct Patient
+struct ad
 {
     char name[30];
     char disease[30];
-    int cabin,age;
-    long long phone;
-} 
-
-patients[MAX_PATIENTS];
-int n,i,endIndex=0,g,num;
+    int cabin,phone,age;
+} x[100];
+int n,i,j=0,a=0,sum=0,g,flag,num;
 void read();
 void add();
 void view();
 void search();
 void edit();
 void del();
+void show();
 void write();
-
 int main()
 {
     read();
-    int c = 0;
-    do {
-        printf("========== Patient Recording System ===========\n");
+    int c,i,q;
+    printf("========== Patient Recording System ===========\n");
+    int m,n;
+
+    while(c!=6)
+    {
+
         printf("\n**Enter your choice**\n\n1. Add Patient\n2. View Patient Record\n3. Search Patient\n4. Update Patient\n5. Delete Patient\n6. Exit\n\nOption=");
-        scanf("%d",&c); //choice for option
-        fflush(stdin); //making it clear
-        if(c==1) //add
+        scanf("%d",&c);//choice for option
+        fflush(stdin);//making it clear
+        if(c==1)//add
         {
             system("clear");
             add();
         }
-        else if(c==2) //view
+        else if(c==2)//view
         {
             system("clear");
             view();
         }
-        else if(c==3) //search
+        else if(c==3)//search
         {
             system("clear");
             search();
         }
-        else if(c==4) //edit
+        else if(c==4)//edit
         {
             system("clear");
             edit();
         }
-        else if(c==5) //delete
+        else if(c==5)//delete
         {
             system("clear");
             del();
@@ -67,42 +65,38 @@ int main()
             printf("\n\nInvalid input , try again by using valid inputs");
         }
         printf("\n\n");
-    } while(c!=6);
+    }
 }
-
 void add()
 {
     printf("\n\n");
-    printf("Already data inputed on the database =%d\n\n",num); //how many inputs
+    printf("Already data inputed on the database =%d\n\n",num);//how many inputs
     printf("How many entry do you want to add=\n");
     scanf("%d",&n);
-    if (num + n > MAX_PATIENTS) {
-        printf("Error: the database can store at most %d records.\n",
-               MAX_PATIENTS);
-        return;
-    }
-    while (getchar() != '\n');
-    endIndex=n+num;
+    sum=n+num;
 
-    for(i=num; i<endIndex; i++)
+    for(i=num,j=0; i<sum; i++)
     {
         printf("\n");
+        fflush(stdin);
         printf("Enter patient's Name = ");
-        fgets(patients[i].name, sizeof(patients[i].name), stdin);
-        patients[i].name[strcspn(patients[i].name, "\n")] = '\0'; // sortörés eltávolítása
+        gets(x[i].name);
+        fflush(stdin);
         printf("Enter disease = ");
-        fgets(patients[i].disease, sizeof(patients[i].disease), stdin);
-        patients[i].disease[strcspn(patients[i].disease, "\n")] = '\0';
+        gets(x[i].disease);
+        fflush(stdin);
         printf("Enter the age = ");
-        scanf("%d",&patients[i].age);
-        while (getchar() != '\n'); // bemeneti puffer kiürítése
+        scanf("%d",&x[i].age);
+        fflush(stdin);
         printf("Enter cabin no = ");
-        scanf("%d",&patients[i].cabin);
-        while (getchar() != '\n');
+        scanf("%d",&x[i].cabin);
+        fflush(stdin);
         printf("Enter phone number = ");
-        scanf("%lld", &patients[i].phone);
-        while (getchar() != '\n');
+        scanf("%d",&x[i].phone);
+        fflush(stdin);
         printf("\n");
+        j++;
+        a++;
         num++;
     }
 }
@@ -114,81 +108,79 @@ void view()
         printf("\n");
         printf("Serial Number=%d\n",i);
         printf("Name = ");
-        puts(patients[i].name);
+        puts(x[i].name);
         printf("Disease = ");
-        puts(patients[i].disease);
-        printf("Cabin no = %d\nPhone number = 0%d\nAge=%d",patients[i].cabin,patients[i].phone,patients[i].age);
+        puts(x[i].disease);
+        printf("Cabin no = %d\nPhone number = 0%d\nAge=%d",x[i].cabin,x[i].phone,x[i].age);
         printf("\n\n");
     }
 }
-
 void edit()
 {
-    int q, p = 0;
-
+    int q,p;
+    fflush(stdin);
     printf("What do you want to edit ?\n");
+    printf("Enter your option\n");
     printf("1.Name\n2.Disease\n3.Age\n4.Cabin\n5.Phone no.\n");
     printf("Option=");
-    scanf("%d", &q);
-    while (getchar() != '\n');   // egyszer, itt
-
-    if (q >= 1 && q <= 5)
+    scanf("%d",&q);//option
+    if(q<=5)
     {
-        printf("Enter the serial no of that patient (0 - %d): ", num-1);
-        scanf("%d", &p);
-        while (getchar() != '\n');   // egyszer, itt
-
-        if (p >= 0 && p < num)
+        printf("Enter the serial no of that patient= (0 - %d)=",num-1);
+        scanf("%d",&p);//serial number
+        if(p<num)
         {
-            if (q == 1)
+            if(q==1)
             {
+                fflush(stdin);
                 printf("Enter the new name=");
-                fgets(patients[p].name, sizeof(patients[p].name), stdin);
-                patients[p].name[strcspn(patients[p].name, "\n")] = '\0';
-                // hosszú input drain:
-                int ch; while ((ch = getchar()) != '\n' && ch != EOF);
+                gets(x[p].name);
+
             }
-            else if (q == 2)
+            else if(q==2)
             {
-                // NEM kell while ide
+                fflush(stdin);
                 printf("Enter the new Disease=");
-                fgets(patients[p].disease, sizeof(patients[p].disease), stdin);
-                patients[p].disease[strcspn(patients[p].disease, "\n")] = '\0';
-                int ch; while ((ch = getchar()) != '\n' && ch != EOF);
+                gets(x[p].disease);
             }
-            else if (q == 3)
+            else if(q==3)
             {
-                // NEM kell while ide
+                fflush(stdin);
                 printf("Enter the new Age=");
-                scanf("%d", &patients[p].age);
+                scanf("%d",&x[p].age);
             }
-            else if (q == 4)
+
+            else if(q==4)
             {
+                fflush(stdin);
                 printf("Enter the new Cabin no=");
-                scanf("%d", &patients[p].cabin);
+                scanf("%d",&x[p].cabin);
             }
-            else if (q == 5)
+
+            else if(q==5)
             {
-                printf("Enter the new Phone no=");
-                scanf("%d", &patients[p].phone);
+                fflush(stdin);
+                printf("Enter the new Phone no =");
+                scanf("%d",&x[p].phone);
             }
         }
         else
-            printf("\n\nInvalid Serial\nTry Again!!\n\n");
+        {
+            printf("\n\nInvalid Serial \nTry Again !!\n\n");
+        }
     }
     else
+    {
         printf("\n\nInvalid option\nTry Again!!\n\n");
+    }
 }
-
 void search()
 {
-    int s,h;
+    int s,h,f;
     char u[100];
-
     printf("By what do you want to search ?\n");
     printf("1.Serial no.\n2.Name\n3.Disease\n4.Cabin no.\n5.Phone no.\n6.Age\n\nOption = ");
     scanf("%d",&h);
-
     if(h==1)
     {
         printf("Enter Serial number of the patient=");
@@ -198,34 +190,33 @@ void search()
             printf("\n");
             printf("Serial Number=%d\n",s);
             printf("Name = ");
-            puts(patients[s].name);
+            puts(x[s].name);
             printf("Disease = ");
-            puts(patients[s].disease);
-            printf("Cabin no = %d\nPhone number = 0%d\nAge = %d",patients[s].cabin,patients[s].phone,patients[s].age);
+            puts(x[s].disease);
+            printf("Cabin no = %d\nPhone number = 0%d\nAge = %d",x[s].cabin,x[s].phone,x[s].age);
             printf("\n\n");
         }
         else
             printf("\n\nNot Found\n\n");
     }
-    else if(h==2) //problem is here.........
+    else if(h==2)//problem is here.........
     {
         int f=1;
         fflush(stdin);
         printf("Enter your name=");
-        fgets(u, sizeof(u), stdin);
-        u[strcspn(u, "\n")] = '\0';
+        gets(u);
         fflush(stdin);
         for(g=0; g<num; g++)
         {
-            if(strcmp(u,patients[g].name)==0)
+            if(strcmp(u,x[g].name)==0)
             {
                 printf("\n");
                 printf("Serial Number=%d\n",g);
                 printf("Name = ");
-                puts(patients[g].name);
+                puts(x[g].name);
                 printf("Disease = ");
-                puts(patients[g].disease);
-                printf("Cabin no = %d\nPhone number = 0%d\nAge = %d",patients[g].cabin,patients[g].phone,patients[g].age);
+                puts(x[g].disease);
+                printf("Cabin no = %d\nPhone number = 0%d\nAge = %d",x[g].cabin,x[g].phone,x[g].age);
                 printf("\n\n");
                 f=0;
 
@@ -233,32 +224,38 @@ void search()
         }
         if(f==1)
             printf("\nNot Found\n");
+
+
+
     }
     else if(h==3)
     {
         int f=1;
         fflush(stdin);
         printf("Enter Disease = ");
-        fgets(u, sizeof(u), stdin);
-        u[strcspn(u, "\n")] = '\0';
+        gets(u);
         fflush(stdin);
         for(g=0; g<num; g++)
         {
-            if(strcmp(u,patients[g].disease)==0)
+            if(strcmp(u,x[g].disease)==0)
             {
                 printf("\n");
                 printf("Serial Number=%d\n",g);
                 printf("Name = ");
-                puts(patients[g].name);
+                puts(x[g].name);
                 printf("Disease = ");
-                puts(patients[g].disease);
-                printf("Cabin no = %d\nPhone number = 0%d\nAge = %d",patients[g].cabin,patients[g].phone,patients[g].age);
+                puts(x[g].disease);
+                printf("Cabin no = %d\nPhone number = 0%d\nAge = %d",x[g].cabin,x[g].phone,x[g].age);
                 printf("\n\n");
                 f=0;
             }
+
+
         }
         if(f==1)
             printf("\nNot Found\n");
+
+
     }
     else if(h==4)
     {
@@ -267,15 +264,15 @@ void search()
         scanf("%d",&f);
         for(g=0; g<num; g++)
         {
-            if(f==patients[g].cabin)
+            if(f==x[g].cabin)
             {
                 printf("\n");
                 printf("Serial Number=%d\n",g);
                 printf("Name = ");
-                puts(patients[g].name);
+                puts(x[g].name);
                 printf("Disease = ");
-                puts(patients[g].disease);
-                printf("Cabin no = %d\nPhone number = 0%d\nAge = %d",patients[g].cabin,patients[g].phone,patients[g].age);
+                puts(x[g].disease);
+                printf("Cabin no = %d\nPhone number = 0%d\nAge = %d",x[g].cabin,x[g].phone,x[g].age);
                 printf("\n\n");
                 f=0;
             }
@@ -283,6 +280,7 @@ void search()
         }
         if(f==1)
             printf("Not Found\n\n");
+
     }
     else if(h==5)
     {
@@ -291,15 +289,15 @@ void search()
         scanf("%d",&f);
         for(g=0; g<num; g++)
         {
-            if(f==patients[g].phone)
+            if(f==x[g].phone)
             {
                 printf("\n");
                 printf("Serial Number=%d\n",g);
                 printf("Name = ");
-                puts(patients[g].name);
+                puts(x[g].name);
                 printf("Disease = ");
-                puts(patients[g].disease);
-                printf("Cabin no = %d\nPhone number = 0%d\nAge = %d",patients[g].cabin,patients[g].phone,patients[g].age);
+                puts(x[g].disease);
+                printf("Cabin no = %d\nPhone number = 0%d\nAge = %d",x[g].cabin,x[g].phone,x[g].age);
                 printf("\n\n");
                 f=0;
             }
@@ -315,104 +313,106 @@ void search()
         scanf("%d",&f);
         for(g=0; g<num; g++)
         {
-            if(f==patients[g].age)
+            if(f==x[g].age)
             {
                 printf("\n");
                 printf("Serial Number=%d\n",g);
                 printf("Name = ");
-                puts(patients[g].name);
+                puts(x[g].name);
                 printf("Disease = ");
-                puts(patients[g].disease);
-                printf("Cabin no = %d\nPhone number = 0%d\nAge = %d",patients[g].cabin,patients[g].phone,patients[g].age);
+                puts(x[g].disease);
+                printf("Cabin no = %d\nPhone number = 0%d\nAge = %d",x[g].cabin,x[g].phone,x[g].age);
                 printf("\n\n");
                 f=0;
             }
+
         }
         if(f==1)
             printf("Not Found\n\n");
+
     }
     else
         printf("\n\nInvalid input\n\n");
-}
 
+
+
+
+}
 void del()
 {
     int f,h;
-
     printf("Enter the serial number of the patient that you want to delete=");
     scanf("%d",&f);
-
-    if(f >= 0 && f < num)
+    if(f<num)
     {
         printf("What do you want ?\n");
         printf("1.Remove the whole record\n2.Remove Name\n3.Remove Disease\n4.Remove age\n5.Remove Cabin\n6.Remove phone number\nOption = ");
         scanf("%d",&h);
         if(h==1)
         {
-            while(f < num - 1) // az utolsó valid index: num-2 → f+1 = num-1
+            while(f<num)
             {
-                patients[f] = patients[f+1]; // az egész struct-ot egy lépésben másolja
+                strcpy(x[f].name,x[f+1].name);
+                strcpy(x[f].disease,x[f+1].disease);
+                x[f].age=x[f+1].age;
+                x[f].cabin=x[f+1].cabin;
+                x[f].phone=x[f+1].phone;
                 f++;
             }
-            // Az utolsó elemet nullázzuk ki (opcionális, de jó gyakorlat)
-            memset(&patients[num-1], 0, sizeof(struct Patient));
             num--;
         }
         else if(h==2)
         {
-            strcpy(patients[f].name,"Cleared");
+            strcpy(x[f].name,"Cleared");
 
         }
         else if(h==3)
         {
-            strcpy(patients[f].disease,"Cleared");
+            strcpy(x[f].disease,"Cleared");
         }
         else if(h==4)
         {
-            patients[f].age=0;
+            x[f].age=0;
         }
         else if(h==5)
         {
-            patients[f].cabin=0;
+            x[f].cabin=0;
         }
         else if(h==6)
         {
-            patients[f].phone=0;
+            x[f].phone=0;
         }
+
     }
     else
         printf("\n\nInvalid Serial number\n");
-}
 
+}
 void read()
 {
-    FILE *fp = fopen("patient.txt", "r");
-    if (fp == NULL) {
-        fp = fopen("patient.txt", "w");
+    FILE *fp = fopen("patient.txt","r");
+    if(fp == NULL)
+    {
+        //create empty file, so that we can open it
+        //in the next execution of this program
+        fp = fopen("patient.txt","w");
         fclose(fp);
         printf("File does not exist, I JUST CREATED IT, exiting...\n\n\n");
-        return;
+        return 0;
     }
 
-    num = 0;
-    while (fscanf(fp, "%29[^,],%29[^,],%d,%lld,%d\n",
-                  patients[num].name, patients[num].disease,
-                  &patients[num].age, &patients[num].phone,
-                  &patients[num].cabin) == 5 && num < MAX_PATIENTS) {
-        num++;
-    }
+    num = fread(x, sizeof(struct ad),100, fp);
     fclose(fp);
 }
-
 void write()
 {
-    FILE *fp = fopen("patient.txt", "w");
-    if (fp == NULL) { printf("Error"); exit(1); }
-
-    for (int i = 0; i < num; i++) {
-        fprintf(fp, "%s,%s,%d,%lld,%d\n",
-                patients[i].name, patients[i].disease,
-                patients[i].age, patients[i].phone, patients[i].cabin);
+    FILE *fp = fopen("patient.txt","w");
+    if(fp == NULL)
+    {
+        printf("Error");
+        exit(1);
     }
+    fwrite(x, sizeof(struct ad),num, fp);
+
     fclose(fp);
 }
